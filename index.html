@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="ko">
+<html lang="en">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>길리원패스 · 투어 확정서</title>
+<title>Gili One Pass · Tour Confirmation</title>
 <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 <style>
@@ -62,7 +62,7 @@ header {
 .fg { margin-bottom: 12px; }
 label {
   display: block;
-  font-size: 9px; font-weight: 700; color: var(--g500);
+  font-size: 9px; font-weight: 700; color: #111;
   letter-spacing: .9px; text-transform: uppercase; margin-bottom: 4px;
 }
 input[type=text], input[type=date], input[type=time],
@@ -81,10 +81,10 @@ input:focus, textarea:focus {
 }
 textarea { resize: vertical; min-height: 52px; line-height: 1.55; }
 .guest-row { display: flex; align-items: center; gap: 6px; margin-bottom: 5px; }
-.guest-idx { font-size: 10px; font-weight: 700; color: var(--blue-mid); min-width: 16px; }
+.guest-idx { font-size: 10px; font-weight: 700; color: #111; min-width: 16px; }
 
 .sdiv {
-  font-size: 8.5px; font-weight: 700; color: var(--blue-acc);
+  font-size: 8.5px; font-weight: 700; color: #111;
   text-transform: uppercase; letter-spacing: 1px;
   margin: 14px 0 9px;
   display: flex; align-items: center; gap: 7px;
@@ -261,7 +261,7 @@ textarea { resize: vertical; min-height: 52px; line-height: 1.55; }
 
 <header>
   <div>
-    <div class="h-title">길리원패스 · 투어 확정서</div>
+    <div class="h-title">Gili One Pass · Tour Confirmation</div>
     <div class="h-sub">Gili One Pass — Tour Confirmation System</div>
   </div>
 </header>
@@ -270,7 +270,7 @@ textarea { resize: vertical; min-height: 52px; line-height: 1.55; }
 
   <!-- ══ 왼쪽 폼 ══ -->
   <aside class="sidebar">
-    <div class="form-title">투어 정보 입력</div>
+    <div class="form-title">Tour Information</div>
 
     <div class="fg"><label>Product</label><input type="text" id="f-product" value="Padangbai Blue Lagoon Tour"></div>
     <div class="fg"><label>Tour Date</label><input type="date" id="f-date" value="2026-04-30"></div>
@@ -283,19 +283,19 @@ textarea { resize: vertical; min-height: 52px; line-height: 1.55; }
     </div>
     <div class="fg"><label>Number of Guests</label><input type="number" id="f-pax" min="1" max="20" value="2"></div>
 
-    <div class="sdiv">게스트 이름</div>
+    <div class="sdiv">Guest Names</div>
     <div id="guest-inputs">
       <div class="guest-row"><span class="guest-idx">1.</span><input type="text" class="guest-name" value="Kim na young"></div>
       <div class="guest-row"><span class="guest-idx">2.</span><input type="text" class="guest-name" value="Kim jihye"></div>
     </div>
 
-    <div class="sdiv">픽업 / 드롭오프</div>
+    <div class="sdiv">Pick-up / Drop-off</div>
     <div class="fg"><label>Pick-up Hotel</label><input type="text" id="f-pickup" value="Kemilau Ubud"></div>
     <div class="fg"><label>Drop-off Hotel</label><input type="text" id="f-dropoff" value="Canggu Village Accommodations"></div>
 
-    <div class="sdiv">포함 / 요금</div>
+    <div class="sdiv">Inclusions / Payment</div>
     <div class="fg">
-      <label>Total Payment — 숫자만 입력</label>
+      <label>Total Payment (numbers only)</label>
       <div style="position:relative;">
         <input type="number" id="f-total-num" placeholder="1250" min="0" step="1" value="1250"
           style="width:100%;padding:8px 54px 8px 11px;border:1.5px solid var(--g300);border-radius:7px;font-family:'Plus Jakarta Sans',sans-serif;font-size:12.5px;color:var(--text);background:var(--g50);outline:none;transition:border-color .15s,box-shadow .15s;"
@@ -303,19 +303,19 @@ textarea { resize: vertical; min-height: 52px; line-height: 1.55; }
         <span style="position:absolute;right:10px;top:50%;transform:translateY(-50%);font-size:10.5px;font-weight:700;color:var(--g500);pointer-events:none;letter-spacing:.2px;">K IDR</span>
       </div>
     </div>
-    <div class="fg"><label>Inclusions (쉼표 구분)</label><input type="text" id="f-inclusions" value="Lunch, GoPro filming"></div>
+    <div class="fg"><label>Inclusions (comma separated)</label><input type="text" id="f-inclusions" value="Lunch, GoPro filming"></div>
 
-    <div class="sdiv">비고</div>
+    <div class="sdiv">Remarks</div>
     <div class="fg"><label>Note</label><textarea id="f-note">Public snorkeling tour (shared with other guests)</textarea></div>
 
-    <button class="btn-gen" onclick="generate()">확정서 생성 →</button>
+    <button class="btn-gen" onclick="generate()">Generate Voucher →</button>
   </aside>
 
   <!-- ══ 오른쪽 미리보기 ══ -->
   <main class="preview-area">
     <div class="top-bar">
-      <div class="preview-lbl">투어 확정서 미리보기</div>
-      <button class="btn-dl" id="dlBtn" onclick="downloadTicket()">⬇ 이미지 다운로드</button>
+      <div class="preview-lbl">Voucher Preview</div>
+      <button class="btn-dl" id="dlBtn" onclick="downloadTicket()">⬇ Download Image</button>
     </div>
 
     <div id="ticket">
@@ -468,7 +468,7 @@ function generate() {
 async function downloadTicket() {
   const btn = document.getElementById('dlBtn');
   btn.classList.add('loading');
-  btn.textContent = '생성 중…';
+  btn.textContent = 'Generating…';
   try {
     const canvas = await html2canvas(document.getElementById('ticket'), {
       scale: 3, useCORS: true, backgroundColor: '#fff', logging: false
@@ -479,7 +479,7 @@ async function downloadTicket() {
     a.click();
   } finally {
     btn.classList.remove('loading');
-    btn.textContent = '⬇ 이미지 다운로드';
+    btn.textContent = '⬇ Download Image';
   }
 }
 
