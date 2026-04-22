@@ -1,0 +1,495 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>길리원패스 · 투어 확정서</title>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+<style>
+:root {
+  --blue:      #1B4F8A;
+  --blue-mid:  #2E75C3;
+  --blue-acc:  #0A9BE0;
+  --blue-pale: #E8F2FC;
+  --blue-lt:   #C8DFF5;
+  --white:     #fff;
+  --g50:       #F7FAFD;
+  --g100:      #EBF2FA;
+  --g300:      #B8CDE3;
+  --g500:      #7294B5;
+  --g700:      #3A566E;
+  --text:      #0F2236;
+}
+* { box-sizing:border-box; margin:0; padding:0; }
+
+body {
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  background: linear-gradient(145deg, #D6EAF8 0%, #EAF3FD 60%, #D6E8F5 100%);
+  min-height: 100vh;
+  color: var(--text);
+}
+
+/* ── HEADER ── */
+header {
+  background: var(--white);
+  padding: 14px 32px;
+  display: flex; align-items: center; justify-content: space-between;
+  border-bottom: 2px solid var(--blue-pale);
+  box-shadow: 0 2px 10px rgba(27,79,138,.08);
+}
+.h-title { font-size: 16px; font-weight: 700; color: var(--blue); letter-spacing: -.3px; }
+.h-sub   { font-size: 10.5px; font-weight: 400; color: var(--g500); margin-top: 2px; }
+
+/* ── LAYOUT ── */
+.layout { display: flex; min-height: calc(100vh - 54px); }
+
+/* ══ SIDEBAR ══ */
+.sidebar {
+  width: 272px; flex-shrink: 0;
+  background: var(--white);
+  border-right: 1.5px solid var(--blue-pale);
+  padding: 22px 18px 28px;
+  overflow-y: auto;
+  display: flex; flex-direction: column;
+}
+.form-title {
+  font-size: 11px; font-weight: 700; color: var(--blue);
+  letter-spacing: .5px; text-transform: uppercase;
+  margin-bottom: 16px; padding-bottom: 11px;
+  border-bottom: 2px solid var(--blue-pale);
+}
+.fg { margin-bottom: 12px; }
+label {
+  display: block;
+  font-size: 9px; font-weight: 700; color: var(--g500);
+  letter-spacing: .9px; text-transform: uppercase; margin-bottom: 4px;
+}
+input[type=text], input[type=date], input[type=time],
+input[type=number], textarea {
+  width: 100%; padding: 8px 11px;
+  border: 1.5px solid var(--g300); border-radius: 7px;
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  font-size: 12.5px; color: var(--text);
+  background: var(--g50); outline: none;
+  transition: border-color .15s, box-shadow .15s;
+}
+input:focus, textarea:focus {
+  border-color: var(--blue-mid);
+  box-shadow: 0 0 0 3px rgba(46,117,195,.09);
+  background: var(--white);
+}
+textarea { resize: vertical; min-height: 52px; line-height: 1.55; }
+.guest-row { display: flex; align-items: center; gap: 6px; margin-bottom: 5px; }
+.guest-idx { font-size: 10px; font-weight: 700; color: var(--blue-mid); min-width: 16px; }
+
+.sdiv {
+  font-size: 8.5px; font-weight: 700; color: var(--blue-acc);
+  text-transform: uppercase; letter-spacing: 1px;
+  margin: 14px 0 9px;
+  display: flex; align-items: center; gap: 7px;
+}
+.sdiv::after { content: ''; flex: 1; height: 1px; background: var(--blue-pale); }
+
+.btn-gen {
+  width: 100%; padding: 12px;
+  background: linear-gradient(135deg, var(--blue), var(--blue-acc));
+  color: #fff; border: none; border-radius: 9px;
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  font-size: 13px; font-weight: 700;
+  cursor: pointer; margin-top: auto;
+  transition: opacity .15s, transform .1s;
+  letter-spacing: -.1px;
+}
+.btn-gen:hover { opacity: .9; transform: translateY(-1px); }
+
+/* ══ PREVIEW ══ */
+.preview-area {
+  flex: 1; padding: 30px 28px;
+  display: flex; flex-direction: column;
+  gap: 16px; overflow-x: auto;
+}
+.preview-lbl {
+  font-size: 9.5px; font-weight: 700; color: var(--g500);
+  letter-spacing: .9px; text-transform: uppercase;
+}
+.top-bar {
+  width: 900px; min-width: 900px;
+  display: flex; align-items: center; justify-content: space-between;
+}
+.btn-dl {
+  display: flex; align-items: center; gap: 7px;
+  background: var(--white);
+  border: 1.5px solid var(--blue-mid);
+  color: var(--blue); border-radius: 9px;
+  padding: 9px 20px; font-size: 12px; font-weight: 700;
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  cursor: pointer; letter-spacing: -.1px;
+  transition: background .15s;
+}
+.btn-dl:hover { background: var(--blue-pale); }
+.btn-dl.loading { opacity: .6; pointer-events: none; }
+
+/* ══════════════════════
+   TICKET (최종)
+══════════════════════ */
+#ticket {
+  width: 900px; min-width: 900px;
+  background: var(--white);
+  border-radius: 16px;
+  box-shadow: 0 12px 48px rgba(27,79,138,.15), 0 2px 8px rgba(27,79,138,.07);
+  overflow: hidden;
+}
+
+/* 헤더 바 */
+.tk-head {
+  background: var(--blue);
+  padding: 0 30px; height: 48px;
+  display: flex; align-items: center; justify-content: space-between;
+}
+.tk-head-brand {
+  font-size: 13.5px; font-weight: 700; color: #fff; letter-spacing: -.2px;
+}
+.tk-head-right { display: flex; align-items: center; gap: 32px; }
+.tk-head-item  { text-align: right; }
+.tk-head-lbl {
+  font-size: 7.5px; font-weight: 600;
+  color: rgba(255,255,255,.5);
+  text-transform: uppercase; letter-spacing: 1.2px;
+}
+.tk-head-val {
+  font-size: 13px; font-weight: 700; color: #fff;
+  margin-top: 2px; letter-spacing: -.1px;
+}
+
+/* 본문 */
+.tk-body { padding: 26px 30px 22px; }
+
+/* 상품명 행 */
+.tk-product-row {
+  display: flex; align-items: flex-end; justify-content: space-between;
+  margin-bottom: 22px; padding-bottom: 18px;
+  border-bottom: 1.5px solid var(--blue-pale);
+  gap: 24px;
+}
+.tk-product {
+  font-size: 29px; font-weight: 800;
+  color: var(--blue); letter-spacing: -.8px; line-height: 1.08;
+}
+.tk-date-time { display: flex; gap: 34px; flex-shrink: 0; }
+.tk-dt { text-align: right; }
+.tk-dt-lbl {
+  font-size: 8px; font-weight: 700; color: var(--g500);
+  text-transform: uppercase; letter-spacing: 1.1px;
+}
+.tk-dt-val {
+  font-size: 22px; font-weight: 700; color: var(--text);
+  margin-top: 4px; letter-spacing: -.6px;
+}
+
+/* 필드 행 */
+.tk-row {
+  display: flex; gap: 0;
+  border-bottom: 1px solid var(--g100);
+}
+.tk-row:last-child { border-bottom: none; }
+.tk-cell {
+  flex: 1; padding: 14px 22px 14px 0;
+  border-right: 1px solid var(--g100);
+}
+.tk-cell:first-child { padding-left: 0; }
+.tk-cell:last-child  { border-right: none; padding-right: 0; }
+.tk-cell.wide  { flex: 1.5; }
+.tk-cell.wide2 { flex: 2.4; }
+
+.tc-lbl {
+  font-size: 8px; font-weight: 700; color: var(--g500);
+  text-transform: uppercase; letter-spacing: 1.1px; margin-bottom: 6px;
+}
+.tc-val {
+  font-size: 15px; font-weight: 600; color: var(--text);
+  line-height: 1.3; letter-spacing: -.25px;
+}
+
+/* 포함사항 + 노트 */
+.tk-inc-row {
+  display: flex; align-items: flex-start;
+  justify-content: space-between;
+  padding-top: 16px; gap: 24px;
+}
+.tk-inc-block { display: flex; align-items: flex-start; gap: 10px; }
+.tk-inc-lbl {
+  font-size: 8px; font-weight: 700; color: var(--g500);
+  text-transform: uppercase; letter-spacing: 1.1px;
+  margin-top: 5px; white-space: nowrap;
+}
+.tk-tags { display: flex; flex-wrap: wrap; gap: 6px; }
+.tk-tag {
+  background: var(--blue-pale); color: var(--blue);
+  border-radius: 100px; padding: 4px 13px;
+  font-size: 11.5px; font-weight: 700; letter-spacing: -.1px;
+}
+.tk-note-txt {
+  font-size: 12.5px; font-weight: 400; color: var(--g700);
+  line-height: 1.55; font-style: italic; margin-top: 3px;
+  letter-spacing: -.1px;
+}
+
+/* 푸터 바 */
+.tk-foot {
+  background: var(--blue-pale);
+  padding: 12px 30px;
+  display: flex; align-items: center; justify-content: space-between;
+  border-top: 1px solid var(--blue-lt);
+}
+.tk-foot-total { display: flex; align-items: baseline; gap: 10px; }
+.tk-foot-tlbl {
+  font-size: 8px; font-weight: 700; color: var(--g500);
+  text-transform: uppercase; letter-spacing: 1.1px;
+}
+.tk-foot-tamt {
+  font-size: 26px; font-weight: 800; color: var(--blue);
+  letter-spacing: -.6px;
+}
+.tk-foot-cancel {
+  font-size: 10.5px; font-weight: 400; color: var(--g500);
+  letter-spacing: -.1px;
+}
+</style>
+</head>
+<body>
+
+<header>
+  <div>
+    <div class="h-title">길리원패스 · 투어 확정서</div>
+    <div class="h-sub">Gili One Pass — Tour Confirmation System</div>
+  </div>
+</header>
+
+<div class="layout">
+
+  <!-- ══ 왼쪽 폼 ══ -->
+  <aside class="sidebar">
+    <div class="form-title">투어 정보 입력</div>
+
+    <div class="fg"><label>Product</label><input type="text" id="f-product" value="Padangbai Blue Lagoon Tour"></div>
+    <div class="fg"><label>Tour Date</label><input type="date" id="f-date" value="2026-04-30"></div>
+    <div class="fg">
+      <label>Start Time</label>
+      <select id="f-time" style="width:100%;padding:8px 11px;border:1.5px solid var(--g300);border-radius:7px;font-family:'Plus Jakarta Sans',sans-serif;font-size:12.5px;color:var(--text);background:var(--g50);outline:none;appearance:none;-webkit-appearance:none;cursor:pointer;transition:border-color .15s,box-shadow .15s;">
+        <option value="09:00">09:00</option>
+        <option value="10:00">10:00</option>
+      </select>
+    </div>
+    <div class="fg"><label>Number of Guests</label><input type="number" id="f-pax" min="1" max="20" value="2"></div>
+
+    <div class="sdiv">게스트 이름</div>
+    <div id="guest-inputs">
+      <div class="guest-row"><span class="guest-idx">1.</span><input type="text" class="guest-name" value="Kim na young"></div>
+      <div class="guest-row"><span class="guest-idx">2.</span><input type="text" class="guest-name" value="Kim jihye"></div>
+    </div>
+
+    <div class="sdiv">픽업 / 드롭오프</div>
+    <div class="fg"><label>Pick-up Hotel</label><input type="text" id="f-pickup" value="Kemilau Ubud"></div>
+    <div class="fg"><label>Drop-off Hotel</label><input type="text" id="f-dropoff" value="Canggu Village Accommodations"></div>
+
+    <div class="sdiv">포함 / 요금</div>
+    <div class="fg">
+      <label>Total Payment — 숫자만 입력</label>
+      <div style="position:relative;">
+        <input type="number" id="f-total-num" placeholder="1250" min="0" step="1" value="1250"
+          style="width:100%;padding:8px 54px 8px 11px;border:1.5px solid var(--g300);border-radius:7px;font-family:'Plus Jakarta Sans',sans-serif;font-size:12.5px;color:var(--text);background:var(--g50);outline:none;transition:border-color .15s,box-shadow .15s;"
+          oninput="autoTotal()">
+        <span style="position:absolute;right:10px;top:50%;transform:translateY(-50%);font-size:10.5px;font-weight:700;color:var(--g500);pointer-events:none;letter-spacing:.2px;">K IDR</span>
+      </div>
+    </div>
+    <div class="fg"><label>Inclusions (쉼표 구분)</label><input type="text" id="f-inclusions" value="Lunch, GoPro filming"></div>
+
+    <div class="sdiv">비고</div>
+    <div class="fg"><label>Note</label><textarea id="f-note">Public snorkeling tour (shared with other guests)</textarea></div>
+
+    <button class="btn-gen" onclick="generate()">확정서 생성 →</button>
+  </aside>
+
+  <!-- ══ 오른쪽 미리보기 ══ -->
+  <main class="preview-area">
+    <div class="top-bar">
+      <div class="preview-lbl">투어 확정서 미리보기</div>
+      <button class="btn-dl" id="dlBtn" onclick="downloadTicket()">⬇ 이미지 다운로드</button>
+    </div>
+
+    <div id="ticket">
+      <!-- 헤더 바 -->
+      <div class="tk-head">
+        <div class="tk-head-brand">길리원패스 · Gili One Pass</div>
+        <div class="tk-head-right">
+          <div class="tk-head-item">
+            <div class="tk-head-lbl">Voucher No.</div>
+            <div class="tk-head-val" id="v-no">GOP-260430-042</div>
+          </div>
+          <div class="tk-head-item">
+            <div class="tk-head-lbl">Issued</div>
+            <div class="tk-head-val" id="v-issued">—</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 본문 -->
+      <div class="tk-body">
+        <!-- 상품명 + 날짜/시간 -->
+        <div class="tk-product-row">
+          <div class="tk-product" id="v-product">Padangbai Blue Lagoon Tour</div>
+          <div class="tk-date-time">
+            <div class="tk-dt">
+              <div class="tk-dt-lbl">Tour Date</div>
+              <div class="tk-dt-val" id="v-date">30 April 2026</div>
+            </div>
+            <div class="tk-dt">
+              <div class="tk-dt-lbl">Start Time</div>
+              <div class="tk-dt-val" id="v-time">09:00</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 행 1: 게스트수 · 이름 -->
+        <div class="tk-row">
+          <div class="tk-cell">
+            <div class="tc-lbl">Guests</div>
+            <div class="tc-val" id="v-pax">2 Pax</div>
+          </div>
+          <div class="tk-cell wide2">
+            <div class="tc-lbl">Guests' Names</div>
+            <div class="tc-val" id="v-guests">Kim na young &nbsp;·&nbsp; Kim jihye</div>
+          </div>
+          <div class="tk-cell wide"></div>
+        </div>
+
+        <!-- 행 2: 픽업 · 드롭오프 -->
+        <div class="tk-row">
+          <div class="tk-cell wide">
+            <div class="tc-lbl">Pick-up Hotel</div>
+            <div class="tc-val" id="v-pickup">Kemilau Ubud</div>
+          </div>
+          <div class="tk-cell wide2">
+            <div class="tc-lbl">Drop-off Hotel</div>
+            <div class="tc-val" id="v-dropoff">Canggu Village Accommodations</div>
+          </div>
+          <div class="tk-cell"></div>
+        </div>
+
+        <!-- 행 3: 포함사항 + 노트 -->
+        <div class="tk-inc-row">
+          <div class="tk-inc-block">
+            <div class="tk-inc-lbl">Inclusions</div>
+            <div class="tk-tags" id="v-inclusions"></div>
+          </div>
+          <div class="tk-inc-block">
+            <div class="tk-inc-lbl">Note</div>
+            <div class="tk-note-txt" id="v-note">—</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 푸터 바 -->
+      <div class="tk-foot">
+        <div class="tk-foot-total">
+          <div class="tk-foot-tlbl">Total Payment</div>
+          <div class="tk-foot-tamt" id="v-total">1,250K IDR</div>
+        </div>
+        <div class="tk-foot-cancel">
+          Cancellation: 100% on the day &nbsp;·&nbsp; 50% within 48H
+        </div>
+      </div>
+    </div><!-- /ticket -->
+
+  </main>
+</div>
+
+<script>
+function fmtDate(v) {
+  if (!v) return '—';
+  return new Date(v + 'T00:00:00').toLocaleDateString('en-GB', {day:'numeric', month:'long', year:'numeric'});
+}
+function genNo() {
+  const n = new Date();
+  return 'GOP-' + n.getFullYear().toString().slice(2) +
+    String(n.getMonth()+1).padStart(2,'0') +
+    String(n.getDate()).padStart(2,'0') + '-' +
+    String(Math.floor(Math.random()*900)+100);
+}
+function syncGuests(n) {
+  const c = document.getElementById('guest-inputs');
+  const vals = [...c.querySelectorAll('.guest-name')].map(i => i.value);
+  c.innerHTML = '';
+  for (let i = 0; i < n; i++) {
+    const r = document.createElement('div');
+    r.className = 'guest-row';
+    r.innerHTML = `<span class="guest-idx">${i+1}.</span><input type="text" class="guest-name" value="${vals[i]||''}">`;
+    c.appendChild(r);
+  }
+}
+document.getElementById('f-pax').addEventListener('input', function() {
+  syncGuests(Math.max(1, parseInt(this.value)||1));
+});
+
+function generate() {
+  const product = document.getElementById('f-product').value || '—';
+  const date    = document.getElementById('f-date').value;
+  const time    = document.getElementById('f-time').value || '—';
+  const pax     = document.getElementById('f-pax').value || '—';
+  const pickup  = document.getElementById('f-pickup').value || '—';
+  const dropoff = document.getElementById('f-dropoff').value || '—';
+  const incRaw  = document.getElementById('f-inclusions').value.split(',').map(s=>s.trim()).filter(Boolean);
+  const rawNum  = document.getElementById('f-total-num').value;
+  const total   = rawNum ? Number(rawNum).toLocaleString() + 'K IDR' : '—';
+  const note    = document.getElementById('f-note').value || '—';
+  const guests  = [...document.querySelectorAll('.guest-name')].map(i=>i.value.trim()).filter(Boolean);
+  const no      = genNo();
+  const issued  = new Date().toLocaleDateString('en-GB', {day:'numeric', month:'short', year:'numeric'});
+
+  document.getElementById('v-no').textContent      = no;
+  document.getElementById('v-issued').textContent  = issued;
+  document.getElementById('v-product').textContent = product;
+  document.getElementById('v-date').textContent    = fmtDate(date);
+  document.getElementById('v-time').textContent    = time;
+  document.getElementById('v-pax').textContent     = pax + ' Pax';
+  document.getElementById('v-pickup').textContent  = pickup;
+  document.getElementById('v-dropoff').textContent = dropoff;
+  document.getElementById('v-total').textContent   = total;
+  document.getElementById('v-note').textContent    = note;
+
+  document.getElementById('v-guests').innerHTML =
+    guests.map(g => `<span>${g}</span>`).join(' &nbsp;·&nbsp; ') || '—';
+
+  document.getElementById('v-inclusions').innerHTML =
+    incRaw.map(t => `<span class="tk-tag">✓ ${t}</span>`).join('');
+}
+
+async function downloadTicket() {
+  const btn = document.getElementById('dlBtn');
+  btn.classList.add('loading');
+  btn.textContent = '생성 중…';
+  try {
+    const canvas = await html2canvas(document.getElementById('ticket'), {
+      scale: 3, useCORS: true, backgroundColor: '#fff', logging: false
+    });
+    const a = document.createElement('a');
+    a.download = `길리원패스_확정서_${document.getElementById('f-date').value || 'tour'}.png`;
+    a.href = canvas.toDataURL('image/png');
+    a.click();
+  } finally {
+    btn.classList.remove('loading');
+    btn.textContent = '⬇ 이미지 다운로드';
+  }
+}
+
+function autoTotal() {
+  const raw = document.getElementById('f-total-num').value;
+  const formatted = raw ? Number(raw).toLocaleString() + 'K IDR' : '—';
+  document.getElementById('v-total').textContent = formatted;
+}
+
+generate();
+</script>
+</body>
+</html>
